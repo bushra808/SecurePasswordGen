@@ -122,11 +122,6 @@ input[type="checkbox"]:checked::before {
   color: red;
   font-size: 12px;
 }
-.setting #lengthError {
-  padding-left: 10px;
-  color: red;
-  font-size: 12px;
-}
 
 .strength-indicator {
   width: 100%;

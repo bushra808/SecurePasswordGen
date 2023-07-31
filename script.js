@@ -52,7 +52,13 @@ clipboard.addEventListener('click', () => {
     const hasSymbol = symbolsEl.checked; // Check if the user selected symbols
   
     // Call the generatePassword function with the user-selected criteria and update the result element
-    resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
+    const excludedSymbolsInput = document.getElementById('excluded-symbols').value;
+    // console.log(excludedSymbolsInput);
+  // Use the input to create the set of excluded symbols
+    const excludedSymbols = excludedSymbolsInput || '';
+  
+  // Call the generatePassword function with the user-selected criteria and the excluded special characters
+  resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length, excludedSymbols);
 
     const passwordStrength = getPasswordStrength(resultEl.innerText);
     setStrengthIndicator(passwordStrength);
@@ -111,10 +117,8 @@ clipboard.addEventListener('click', () => {
   }
   
   
-  
-  
 
-  function generatePassword(lower, upper, number, symbol, length) {
+  function generatePassword(lower, upper, number, symbol, length, excludedSymbols) {
     let generatedPassword = '';
     const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter(item => Object.values(item)[0]);
     const typesCount = typesArr.length;
@@ -127,12 +131,13 @@ clipboard.addEventListener('click', () => {
     for (let i = 0; i < length; i++) {
       const randomTypeIndex = Math.floor(Math.random() * typesCount);
       const funcName = Object.keys(typesArr[randomTypeIndex])[0];
-      generatedPassword += randomFunc[funcName]();
-    }
   
-    // const strengthIndicator = document.getElementById('strength-bar');
-    // strengthIndicator.innerText = getPasswordStrength(generatedPassword);
-    
+      if (funcName === 'symbol') {
+        generatedPassword += getRandomSymbol(excludedSymbols);
+      } else {
+        generatedPassword += randomFunc[funcName]();
+      }
+    }
     return generatedPassword;
   }
   
@@ -162,11 +167,21 @@ clipboard.addEventListener('click', () => {
   }
   
   
-  function getRandomSymbol() {
+  function getRandomSymbol(excludedSymbols) {
     const symbols = '!@#$%^&*(){}[]=<>/,.';
-    const randomBytes = new Uint8Array(1);
-    crypto.getRandomValues(randomBytes);
-    const randomIndex = randomBytes[0] % symbols.length;
-    return symbols.charAt(randomIndex);
+  
+    if (excludedSymbols.length === symbols.length) {
+      // If all symbols are excluded, consider the "symbols" checkbox as unchecked
+      return '';
+    }
+  
+    // Filter out excluded symbols from the available symbols
+    const availableSymbols = symbols.split('').filter(s => !excludedSymbols.includes(s));
+  
+    const randomIndex = Math.floor(Math.random() * availableSymbols.length);
+    return availableSymbols[randomIndex];
   }
+  
+  
+  
   
