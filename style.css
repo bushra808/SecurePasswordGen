@@ -117,6 +117,71 @@ input[type="checkbox"]:checked::before {
   margin: 15px 0;
 }
 
+.setting #lengthError {
+  padding-left: 10px;
+  color: red;
+  font-size: 12px;
+}
+.setting #lengthError {
+  padding-left: 10px;
+  color: red;
+  font-size: 12px;
+}
+
+.strength-indicator {
+  width: 100%;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 4px;
+  position: relative;
+  display: none; /* Initially hide the strength indicator */
+}
+
+#strength-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  margin: 10px 0;
+}
+
+#strength-bar::before {
+  content: attr(data-strength-text);
+  position: absolute;
+  top: 50%;
+  left: 10px; /* Adjust the left position for text */
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.strength-indicator.very-weak #strength-bar {
+  background-color: red;
+  width: 20%;
+}
+
+.strength-indicator.weak #strength-bar {
+  background-color: orange;
+  width: 40%;
+}
+
+.strength-indicator.okay #strength-bar {
+  background-color: coral;
+  width: 60%;
+}
+
+.strength-indicator.strong #strength-bar {
+  background-color: yellowgreen;
+  width: 80%;
+}
+
+.strength-indicator.very-strong #strength-bar {
+  background-color: green;
+  width: 100%;
+}
+
 @media screen and (max-width: 400px) {
   .result-container {
     font-size: 14px;
