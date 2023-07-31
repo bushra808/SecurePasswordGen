@@ -37,7 +37,7 @@ clipboard.addEventListener('click', () => {
   generate.addEventListener('click', () => {
     const length = +lengthEl.value; // Get the user-selected password length as a number
 
-    if (length < 4 || length > 20) {
+    if (length < 4 || length > 25) {
       lengthErrorEl.textContent = "Please enter a valid length.";
       lengthErrorEl.style.display = "block";
       resultEl.innerText = "";
@@ -74,15 +74,16 @@ clipboard.addEventListener('click', () => {
     let strength = 0;
   
     // Assign points for each characteristic
-    if (length >= 10) {
+    if (length >= 16) {
+      strength += 3; // Good length
+    } else if (length >= 10) {
       strength += 2; // Good length
-    }
-    else if(length >= 8) {
+    } else if (length >= 8) {
       strength += 1; // Good length
     }
   
     if (hasLower || hasUpper) {
-      strength += 1; 
+      strength += 1;
     }
   
     if (hasNumber) {
@@ -93,8 +94,10 @@ clipboard.addEventListener('click', () => {
       strength += 1; // Symbols present
     }
   
-    return strength;
+    // Ensure strength value does not exceed 5
+    return Math.min(strength, 5);
   }
+  
   
   
 
